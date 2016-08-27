@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="utf-8">
 
@@ -18,7 +19,22 @@
     <!--<link rel="stylesheet" href="style.css">
     <script src="script.js"></script>-->
 </head>
+
 <body>
-IGCPortal
+<h1>IGCPortal</h1>
+
+<br/>
+
+Link do pliku IGC: <input type="text" id="url">
+
+<br/><br/>
+
+<button type="button" id="seeDetails" onclick="getDetails()">SZCZEGÓŁY</button>
+
+<br/><br/>
+
+<div id="details"></div>
+
+<script src="scripts.js"></script>
 </body>
 </html>
