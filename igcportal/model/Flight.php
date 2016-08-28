@@ -22,6 +22,8 @@ class Flight implements JsonSerializable
     public $minHeight;
     public $flightDistance;
     public $flightDuration;
+    public $startPoint;
+    public $finishPoint;
 
     /**
      * Flight constructor.
@@ -40,8 +42,10 @@ class Flight implements JsonSerializable
         $this->glideClass = '';
         $this->maxHeight = 0;
         $this->minHeight = 80000;
-        $this->flightDistance = '';
+        //$this->flightDistance = '';
         $this->flightDuration = 0;
+        $this->startPoint = '';
+        $this->finishPoint = '';
     }
 
     /**

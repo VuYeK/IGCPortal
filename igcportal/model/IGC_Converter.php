@@ -47,8 +47,11 @@ class IGC_Converter
     public function getDetails(Flight $flight)
     {
         if (is_array($this->lines)) {
+            $start_flag = false;
 
             foreach ($this->lines as $each) {
+
+                //Obsługa rekorków typu H
                 if ($each['type'] == 'H') {
                     $record = $this->H_Type($each);
                     switch ($record['type']) {
@@ -112,16 +115,54 @@ class IGC_Converter
                             break;
                         }
                     }
+                } //Obsługa rekordów typu B
+                elseif ($each['type'] == 'B') {
+                    $record = $this->B_Type($each);
+
+                    $record_time = clone $flight->flightDateTime;
+                    $record_time->setTime($record['timeH'],
+                        $record['timeM'],
+                        $record['timeS']);
+                    if (!$start_flag) {
+                        $start_flag = true;
+                        $flight->flightDateTime = $record_time;
+                        //Punkt początkowy
+                        $flight->startPoint = $record['latitude']['decimal_degrees'] . ',' . $record['longtitude']['decimal_degrees'];
+                    }
+
+                    //Punkt końcowy
+                    $flight->finishPoint = $record['latitude']['decimal_degrees'] . ',' . $record['longtitude']['decimal_degrees'];
+
+
+                    //Obliczenie czasu lotu
+                    $flight->flightDuration = $record_time->getTimestamp() - $flight->flightDateTime->getTimestamp();
+                    $flight->flightDuration = (string)($flight->flightDuration / 3600 % 24) . ':' . (string)($flight->flightDuration / 60 % 60) . ':' . (string)($flight->flightDuration % 60);
+
+                    //Min i max wysokość
+                    if ($record['pressure_altitude'] > $flight->maxHeight) {
+                        $flight->maxHeight = $record['pressure_altitude'];
+                    } elseif ($record['pressure_altitude'] < $flight->minHeight) {
+                        $flight->minHeight = $record['pressure_altitude'];
+                    }
                 }
             }
+
+            //Pobranie lokalizacji początkowej i końcowej z google api
+            $dataArray = json_decode(@file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $flight->startPoint), true);
+            $flight->startPoint = $flight->startPoint . ' --- ' . $dataArray['results'][0]['formatted_address'];
+
+            $dataArray = json_decode(@file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $flight->finishPoint), true);
+            $flight->finishPoint = $flight->finishPoint . ' --- ' . $dataArray['results'][0]['formatted_address'];
+
+
         }
     }
 
 
     /**
      * Obsługa rekordów typu H
-     * @param $record
-     * @return mixed
+     * @param $record - rekord typu H
+     * @return mixed - tablica z rozłożonym rekordem
      */
     public function H_Type($record)
     {
@@ -133,5 +174,57 @@ class IGC_Converter
         $H_result['value'] = substr($record['line'], 5);
 
         return $H_result;
+    }
+
+
+    /**
+     * Obsługa rekordów typu B
+     * @param $record - rekord typu B
+     * @return mixed - tablica z danymi z rekordu
+     */
+    public function B_Type($record)
+    {
+        // Czas
+        $B_result['timeH'] = substr($record['line'], 1, 2);
+        $B_result['timeM'] = substr($record['line'], 3, 2);
+        $B_result['timeS'] = substr($record['line'], 5, 2);
+
+        // Szerokość geograficzna
+        $latitude = array();
+        $latitude['degrees'] = substr($record['line'], 7, 2);
+        $latitude['minutes'] = substr($record['line'], 9, 2);
+        $latitude['decimal_minutes'] = substr($record['line'], 11, 3);
+        $latitude['direction'] = substr($record['line'], 14, 1);
+
+        $pm = $latitude['direction'] == "S" ? "-" : "";
+        $dd = round((((int)$latitude['minutes'] . "." . (int)$latitude['decimal_minutes']) / 60) + (int)$latitude['degrees'], 6);
+        $latitude['decimal_degrees'] = $pm . $dd;
+
+        //Zapisanie danych szzerokości do tablicy wynikowej
+        $B_result['latitude'] = $latitude;
+
+
+        // Długość geograficzna
+        $longitude = array();
+        $longitude['degrees'] = substr($record['line'], 15, 3);
+        $longitude['minutes'] = substr($record['line'], 18, 2);
+        $longitude['decimal_minutes'] = substr($record['line'], 20, 3);
+        $longitude['direction'] = substr($record['line'], 23, 1);
+
+        $pm = $longitude['direction'] == "W" ? "-" : "";
+        $dd = round((((int)$longitude['minutes'] . "." . (int)$longitude['decimal_minutes']) / 60) + (int)$longitude['degrees'], 6);
+        $longitude['decimal_degrees'] = $pm . $dd;
+
+        //Zapisanie danych długości do tablicy wynikowej
+        $B_result['longtitude'] = $longitude;
+
+        // Wysokość ciśnieniowa
+        $B_result['pressure_altitude'] = intval(substr($record['line'], 25, 5));
+
+        // Wysokość GPS
+        $B_result['gps_altitude'] = intval(substr($record['line'], 30, 5));
+
+
+        return $B_result;
     }
 }

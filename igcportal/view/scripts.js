@@ -70,5 +70,11 @@ function fillDetails(json) {
         + "</td></tr><tr><td><b>System odniesienia:</b></td><td>" + obj.flight.GPSdatum
         + "</td></tr><tr><td><b>Logger:</b></td><td>" + " <b>FW:</b> " + obj.flight.loggerFirmware + " <b>HW:</b> " + obj.flight.loggerHardware + "<b>Model:</b> " + obj.flight.loggerType
         + "</td></tr><tr><td><b>Klasa paralotniowa:</b></td><td>" + obj.flight.glideClass
+        + "</td></tr><tr><td><b>Minimalne wzniesienie (wzgl. startu):</b></td><td>" + obj.flight.minHeight + "m"
+        + "</td></tr><tr><td><b>Maksymalne wzniesienie (wzgl. startu):</b></td><td>" + obj.flight.maxHeight + "m"
+        + "</td></tr><tr><td><b>Długość lotu:</b></td><td>" + obj.flight.flightDuration
+        + "</td></tr><tr><td><b>----------------------------</b></td><td>---------------------------"
+        + "</td></tr><tr><td><b>Punkt początkowy:</b></td><td>" + obj.flight.startPoint
+        + "</td></tr><tr><td><b>Punkt końcowy:</b></td><td>" + obj.flight.finishPoint
         + "</td></tr></table>";
 }
