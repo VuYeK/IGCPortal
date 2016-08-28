@@ -58,6 +58,7 @@ function getDetails() {
     });
 }
 
+
 function fillDetails(json) {
     var obj = JSON.parse(json);
     document.getElementById('details').innerHTML = "<table>" +
@@ -76,5 +77,7 @@ function fillDetails(json) {
         + "</td></tr><tr><td><b>----------------------------</b></td><td>---------------------------"
         + "</td></tr><tr><td><b>Punkt początkowy:</b></td><td>" + obj.flight.startPoint
         + "</td></tr><tr><td><b>Punkt końcowy:</b></td><td>" + obj.flight.finishPoint
-        + "</td></tr></table>";
+        + "</td></tr></table>"
+        + "<br/><br/>--------------------------------------------------------------------------------------------------<br/><br/><b>MAPA TRASY:</b><br/>";
+    $('#mapDetails').html(obj.flight.mapCode);
 }

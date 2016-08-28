@@ -11,6 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
     <link rel="shortcut icon" href="favicon.png"/>
+    <script src="lib/jquery-3.1.0.min.js"></script>
 
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -34,7 +35,12 @@ Link do pliku IGC: <input type="text" id="url">
 <br/><br/>
 
 <div id="details"></div>
+<div id="mapDetails"></div>
 
+<br/><br/>
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyCzFMnn9r2mSNLdYx9e8fXgBRUpNrVBFxI"
+        type="text/javascript"></script>
 <script src="scripts.js"></script>
 </body>
 </html>

@@ -41,13 +41,24 @@ class IGC_Converter
 
 
     /**
-     * Funkcja pobierająca szczegóły lotu
+     * Funkcja pobierająca szczegóły lotu oraz generująca skrpyt do rysowania mapy z GoogleMapsAPI
      * @param Flight $flight - lot do uzupełnienia
      */
     public function getDetails(Flight $flight)
     {
         if (is_array($this->lines)) {
             $start_flag = false;
+
+            //Inicjalizacja mapy
+            $mapCode = '
+<br /><br />
+<div id="map" style="width: 800px; height: 600px; border: 3px solid #434343;"></div>
+
+<script type="text/javascript">
+
+
+        var map = new GMap2(document.getElementById("map"));
+        ';
 
             foreach ($this->lines as $each) {
 
@@ -128,6 +139,10 @@ class IGC_Converter
                         $flight->flightDateTime = $record_time;
                         //Punkt początkowy
                         $flight->startPoint = $record['latitude']['decimal_degrees'] . ',' . $record['longtitude']['decimal_degrees'];
+
+                        //Początek mapy
+                        $mapCode .= "map.setCenter(new GLatLng(" . $record['latitude']['decimal_degrees'] . ", " . $record['longtitude']['decimal_degrees'] . "), 13, G_SATELLITE_MAP);\n";
+                        $mapCode .= "var polyline = new GPolyline([\n";
                     }
 
                     //Punkt końcowy
@@ -144,6 +159,10 @@ class IGC_Converter
                     } elseif ($record['pressure_altitude'] < $flight->minHeight) {
                         $flight->minHeight = $record['pressure_altitude'];
                     }
+
+
+                    //Kolejne punkty mapy
+                    $mapCode .= "new GLatLng(" . $record['latitude']['decimal_degrees'] . ", " . $record['longtitude']['decimal_degrees'] . "),\n";
                 }
             }
 
@@ -154,7 +173,12 @@ class IGC_Converter
             $dataArray = json_decode(@file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $flight->finishPoint), true);
             $flight->finishPoint = $flight->finishPoint . ' --- ' . $dataArray['results'][0]['formatted_address'];
 
-
+            //Zakończenie mapy
+            $mapCode .= '
+        ], "#FF0000", 2);
+        map.addOverlay(polyline);
+    </script>';
+            $flight->mapCode = $mapCode;
         }
     }
 
