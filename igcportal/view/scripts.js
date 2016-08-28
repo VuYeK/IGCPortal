@@ -61,7 +61,7 @@ function getDetails() {
 
 function fillDetails(json) {
     var obj = JSON.parse(json);
-    document.getElementById('details').innerHTML = "<table>" +
+    document.getElementById('details').innerHTML = '<table class="table table-bordered" style="background-color: rgba(25, 51, 43, 0.71); color: rgba(228, 228, 228, 0.9); width: 40%; margin-left: auto; margin-right: auto">' +
         "<tr><td><b>Data i godzina lotu:</b></td><td>" + obj.flight.flightDateTime.date
         + "</td></tr><tr><td><b>Strefa czasowa:</b></td><td>" + obj.flight.flightDateTime.timezone_type + " - " + obj.flight.flightDateTime.timezone
         + "</td></tr><tr><td><b>Pilot:</b></td><td>" + obj.flight.pilot
@@ -71,13 +71,12 @@ function fillDetails(json) {
         + "</td></tr><tr><td><b>System odniesienia:</b></td><td>" + obj.flight.GPSdatum
         + "</td></tr><tr><td><b>Logger:</b></td><td>" + " <b>FW:</b> " + obj.flight.loggerFirmware + " <b>HW:</b> " + obj.flight.loggerHardware + "<b>Model:</b> " + obj.flight.loggerType
         + "</td></tr><tr><td><b>Klasa paralotniowa:</b></td><td>" + obj.flight.glideClass
-        + "</td></tr><tr><td><b>Minimalne wzniesienie (wzgl. startu):</b></td><td>" + obj.flight.minHeight + "m"
-        + "</td></tr><tr><td><b>Maksymalne wzniesienie (wzgl. startu):</b></td><td>" + obj.flight.maxHeight + "m"
+        + "</td></tr><tr><td><b>Min. wys. wz. startu:</b></td><td>" + obj.flight.minHeight + "m"
+        + "</td></tr><tr><td><b>Max. wys. wz. startu:</b></td><td>" + obj.flight.maxHeight + "m"
         + "</td></tr><tr><td><b>Długość lotu:</b></td><td>" + obj.flight.flightDuration
-        + "</td></tr><tr><td><b>----------------------------</b></td><td>---------------------------"
         + "</td></tr><tr><td><b>Punkt początkowy:</b></td><td>" + obj.flight.startPoint
         + "</td></tr><tr><td><b>Punkt końcowy:</b></td><td>" + obj.flight.finishPoint
         + "</td></tr></table>"
-        + "<br/><br/>--------------------------------------------------------------------------------------------------<br/><br/><b>MAPA TRASY:</b><br/>";
+    ;
     $('#mapDetails').html(obj.flight.mapCode);
 }

@@ -52,7 +52,7 @@ class IGC_Converter
             //Inicjalizacja mapy
             $mapCode = '
 <br /><br />
-<div id="map" style="width: 800px; height: 600px; border: 3px solid #434343;"></div>
+<div id="map" style="width: 40%; height: 460px; border: 3px solid #434343; text-align: center; margin-left: auto; margin-right: auto"></div>
 
 <script type="text/javascript">
 
