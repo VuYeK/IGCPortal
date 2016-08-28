@@ -56,8 +56,8 @@
 </div>
 
 
-<div class="container-fluid bg-1 text-center"
-     style="background-color: rgba(94, 188, 153, 0.71); margin-top: -30px; padding: 40px;">
+<div id="container1" class="container-fluid bg-1 text-center"
+     style="background-color: rgba(94, 188, 153, 0.71); margin-top: -30px; padding: 40px; display: none">
     <h3><b>LINK DO PLIKU .IGC:</b></h3> <input type="text" id="url" class="form-control"
                                                style="width: 20%; margin-left: auto; margin-right: auto">
     <button type="button" id="seeDetails" class="btn btn-primary" onclick="getDetails()" style="margin-top: 15px;">
@@ -78,6 +78,12 @@
 
 
 <br/><br/>
+
+<script>
+    $(document).ready(function () {
+        $('#container1').fadeIn(2500);
+    })
+</script>
 
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyCzFMnn9r2mSNLdYx9e8fXgBRUpNrVBFxI"
         type="text/javascript"></script>

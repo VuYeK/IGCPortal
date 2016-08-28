@@ -61,7 +61,7 @@ function getDetails() {
 
 function fillDetails(json) {
     var obj = JSON.parse(json);
-    document.getElementById('details').innerHTML = '<table class="table table-bordered" style="background-color: rgba(25, 51, 43, 0.71); color: rgba(228, 228, 228, 0.9); width: 40%; margin-left: auto; margin-right: auto">' +
+    document.getElementById('details').innerHTML = '<table id="tableDetail" class="table table-bordered" style="background-color: rgba(25, 51, 43, 0.71); color: rgba(228, 228, 228, 0.9); width: 40%; margin-left: auto; margin-right: auto; display: none">' +
         "<tr><td><b>Data i godzina lotu:</b></td><td>" + obj.flight.flightDateTime.date
         + "</td></tr><tr><td><b>Strefa czasowa:</b></td><td>" + obj.flight.flightDateTime.timezone_type + " - " + obj.flight.flightDateTime.timezone
         + "</td></tr><tr><td><b>Pilot:</b></td><td>" + obj.flight.pilot
@@ -79,4 +79,5 @@ function fillDetails(json) {
         + "</td></tr></table>"
     ;
     $('#mapDetails').html(obj.flight.mapCode);
+    $('#tableDetail').fadeIn(2000);
 }
