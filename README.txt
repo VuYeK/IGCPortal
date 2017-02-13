@@ -1,1 +1,0 @@
-Zadanie rekrutacyjne z PHP - Obsługa plików IGC zawierających przebieg lotu paralotniowego.
